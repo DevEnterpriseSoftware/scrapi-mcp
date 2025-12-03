@@ -11,6 +11,10 @@ MCP server for using [ScrAPI](https://scrapi.tech) to scrape web pages.
 
 ScrAPI is your ultimate web scraping solution, offering powerful, reliable, and easy-to-use features to extract data from any website effortlessly.
 
+<a href="https://glama.ai/mcp/servers/@DevEnterpriseSoftware/scrapi-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@DevEnterpriseSoftware/scrapi-mcp/badge" alt="ScrAPI Server MCP server" />
+</a>
+
 ## Tools
 
 1. `scrape_url_html`
