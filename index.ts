@@ -118,8 +118,10 @@ export default function createServer({
           content: [
             {
               type: "text" as const,
-              mimeType: `text/${format.toLowerCase()}`,
               text: data,
+              _meta: {
+                mimeType: `text/${format.toLowerCase()}`,
+              },
             },
           ],
         };
@@ -155,8 +157,10 @@ export default function createServer({
       content: [
         {
           type: "text",
-          mimeType: `text/${format.toLowerCase()}`,
           text: data,
+          _meta: {
+            mimeType: `text/${format.toLowerCase()}`,
+          },
         },
       ],
     };
