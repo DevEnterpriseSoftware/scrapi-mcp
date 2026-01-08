@@ -1,6 +1,6 @@
 {
   "name": "@deventerprisesoftware/scrapi-mcp",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "MCP server for using ScrAPI to scrape web pages.",
   "keywords": [
     "mcp",
@@ -37,7 +37,7 @@
     "docker:release": "npm run build && npm run docker:build && npm run docker:push"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.2",
+    "@modelcontextprotocol/sdk": "^1.25.2",
     "cors": "^2.8.5",
     "express": "^5.2.1",
     "zod": "^3.25.76"
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.3",
     "shx": "^0.4.0",
     "typescript": "^5.9.3"
   }

@@ -11,15 +11,22 @@ import { z } from "zod";
 const PORT = process.env.PORT || 5000;
 const SCRAPI_API_KEY = process.env.SCRAPI_API_KEY || "00000000-0000-0000-0000-000000000000";
 const SCRAPI_SERVER_NAME = "ScrAPI MCP Server";
-const SCRAPI_SERVER_VERSION = "0.1.0";
+const SCRAPI_SERVER_VERSION = "0.2.0";
 
 const app = express();
 
 app.use(
   cors({
     origin: "*",
-    exposedHeaders: ["Mcp-Session-Id", "mcp-protocol-version"],
-    allowedHeaders: ["Content-Type", "mcp-session-id"],
+    exposedHeaders: ["mcp-session-id", "mcp-protocol-version"],
+    allowedHeaders: [
+      "Content-Type",
+      "mcp-session-id",
+      "mcp-protocol-version",
+      "Authorization",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    preflightContinue: false
   })
 );
 
@@ -57,15 +64,29 @@ export default function createServer({
       description:
         "Use a URL to scrape a website using the ScrAPI service and retrieve the result as HTML. " +
         "Use this for scraping website content that is difficult to access because of bot detection, captchas or even geolocation restrictions. " +
-        "The result will be in HTML which is preferable if advanced parsing is required.",
+        "The result will be in HTML which is preferable if advanced parsing is required.\n\n" +
+        "BROWSER COMMANDS: You can optionally provide browser commands to interact with the page before scraping (e.g., clicking buttons, filling forms, scrolling). " +
+        "Provide commands as a JSON array string. Available commands:\n" +
+        "- Click: {\"click\": \"#buttonId\"} - Click an element using CSS selector\n" +
+        "- Input: {\"input\": {\"input[name='email']\": \"value\"}} - Fill an input field\n" +
+        "- Select: {\"select\": {\"select[name='country']\": \"USA\"}} - Select from dropdown\n" +
+        "- Scroll: {\"scroll\": 1000} - Scroll down (negative values scroll up)\n" +
+        "- Wait: {\"wait\": 5000} - Wait milliseconds (max 15000)\n" +
+        "- WaitFor: {\"waitfor\": \"#elementId\"} - Wait for element to appear\n" +
+        "- JavaScript: {\"javascript\": \"console.log('test')\"} - Execute custom JS\n" +
+        "Example: [{\"click\": \"#accept-cookies\"}, {\"wait\": 2000}, {\"input\": {\"input[name='search']\": \"query\"}}]",
       inputSchema: {
         url: z
           .string()
           .url({ message: "Invalid URL" })
           .describe("The URL to scrape"),
+        browserCommands: z
+          .string()
+          .optional()
+          .describe("Optional JSON array of browser commands to execute before scraping. See tool description for available commands and format."),
       },
     },
-    async ({ url }) => await scrapeUrl(url, "HTML")
+    async ({ url, browserCommands }) => await scrapeUrl(url, "HTML", browserCommands)
   );
 
   server.registerTool(
@@ -75,22 +96,37 @@ export default function createServer({
       description:
         "Use a URL to scrape a website using the ScrAPI service and retrieve the result as Markdown. " +
         "Use this for scraping website content that is difficult to access because of bot detection, captchas or even geolocation restrictions. " +
-        "The result will be in Markdown which is preferable if the text content of the webpage is important and not the structural information of the page.",
+        "The result will be in Markdown which is preferable if the text content of the webpage is important and not the structural information of the page.\n\n" +
+        "BROWSER COMMANDS: You can optionally provide browser commands to interact with the page before scraping (e.g., clicking buttons, filling forms, scrolling). " +
+        "Provide commands as a JSON array string. Available commands:\n" +
+        "- Click: {\"click\": \"#buttonId\"} - Click an element using CSS selector\n" +
+        "- Input: {\"input\": {\"input[name='email']\": \"value\"}} - Fill an input field\n" +
+        "- Select: {\"select\": {\"select[name='country']\": \"USA\"}} - Select from dropdown\n" +
+        "- Scroll: {\"scroll\": 1000} - Scroll down (negative values scroll up)\n" +
+        "- Wait: {\"wait\": 5000} - Wait milliseconds (max 15000)\n" +
+        "- WaitFor: {\"waitfor\": \"#elementId\"} - Wait for element to appear\n" +
+        "- JavaScript: {\"javascript\": \"console.log('test')\"} - Execute custom JS\n" +
+        "Example: [{\"click\": \"#accept-cookies\"}, {\"wait\": 2000}, {\"input\": {\"input[name='search']\": \"query\"}}]",
       inputSchema: {
         url: z
           .string()
           .url({ message: "Invalid URL" })
           .describe("The URL to scrape"),
+        browserCommands: z
+          .string()
+          .optional()
+          .describe("Optional JSON array of browser commands to execute before scraping. See tool description for available commands and format."),
       },
     },
-    async ({ url }) => await scrapeUrl(url, "Markdown")
+    async ({ url, browserCommands }) => await scrapeUrl(url, "Markdown", browserCommands)
   );
 
   async function scrapeUrl(
     url: string,
-    format: "HTML" | "Markdown"
+    format: "HTML" | "Markdown",
+    browserCommands?: string
   ): Promise<CallToolResult> {
-    var body = {
+    const body: any = {
       url: url,
       useBrowser: true,
       solveCaptchas: true,
@@ -98,6 +134,37 @@ export default function createServer({
       proxyType: "Residential",
       responseFormat: format,
     };
+
+    // Parse and add browser commands if provided
+    if (browserCommands && browserCommands.trim() !== "") {
+      try {
+        const commands = JSON.parse(browserCommands);
+        if (Array.isArray(commands)) {
+          body.browserCommands = commands;
+        } else {
+          return {
+            content: [
+              {
+                type: "text" as const,
+                text: "Error: Browser commands must be a JSON array.",
+              },
+            ],
+            isError: true,
+          };
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Error: Invalid browser commands format. ${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    }
 
     try {
       const response = await fetch("https://api.scrapi.tech/v1/scrape", {
@@ -108,7 +175,7 @@ export default function createServer({
           "X-API-KEY": config.scrapiApiKey || SCRAPI_API_KEY,
         },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(30000),
+        signal: AbortSignal.timeout(300000),
       });
 
       const data = await response.text();
@@ -138,32 +205,18 @@ export default function createServer({
       };
     } catch (error) {
       console.error("Error calling API:", error);
-    }
-
-    const response = await fetch("https://api.scrapi.tech/v1/scrape", {
-      method: "POST",
-      headers: {
-        "User-Agent": `${SCRAPI_SERVER_NAME} - ${SCRAPI_SERVER_VERSION}`,
-        "Content-Type": "application/json",
-        "X-API-KEY": SCRAPI_API_KEY,
-      },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(30000),
-    });
-
-    const data = await response.text();
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: data,
-          _meta: {
-            mimeType: `text/${format.toLowerCase()}`,
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+      
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `Error: Failed to scrape URL. ${errorMessage}`,
           },
-        },
-      ],
-    };
+        ],
+        isError: true,
+      };
+    }
   }
 
   return server.server;
@@ -203,6 +256,16 @@ app.all("/mcp", async (req: Request, res: Response) => {
       });
     }
   }
+});
+
+app.options("/*", (req, res) => {
+  const reqHeaders = req.header("access-control-request-headers");
+  if (reqHeaders) {
+    res.setHeader("Access-Control-Allow-Headers", reqHeaders);
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.sendStatus(204);
 });
 
 // Main function to start the server in the appropriate mode

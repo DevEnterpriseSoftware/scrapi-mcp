@@ -21,15 +21,62 @@ ScrAPI is your ultimate web scraping solution, offering powerful, reliable, and 
    - Use a URL to scrape a website using the ScrAPI service and retrieve the result as HTML.
      Use this for scraping website content that is difficult to access because of bot detection, captchas or even geolocation restrictions.
      The result will be in HTML which is preferable if advanced parsing is required.
-   - Input: `url` (string)
+   - Inputs:
+     - `url` (string, required): The URL to scrape
+     - `browserCommands` (string, optional): JSON array of browser commands to execute before scraping
    - Returns: HTML content of the URL
 
 2. `scrape_url_markdown`
    - Use a URL to scrape a website using the ScrAPI service and retrieve the result as Markdown.
      Use this for scraping website content that is difficult to access because of bot detection, captchas or even geolocation restrictions.
      The result will be in Markdown which is preferable if the text content of the webpage is important and not the structural information of the page.
-   - Input: `url` (string)
+   - Inputs:
+     - `url` (string, required): The URL to scrape
+     - `browserCommands` (string, optional): JSON array of browser commands to execute before scraping
    - Returns: Markdown content of the URL
+
+## Browser Commands
+
+Both tools support optional browser commands that allow you to interact with the page before scraping. This is useful for:
+- Clicking buttons (e.g., "Accept Cookies", "Load More")
+- Filling out forms
+- Selecting dropdown options
+- Scrolling to load dynamic content
+- Waiting for elements to appear
+- Executing custom JavaScript
+
+### Available Commands
+
+Commands are provided as a JSON array string. All commands are executed with human-like behavior (random mouse movements, variable typing speed, etc.):
+
+| Command | Format | Description |
+|---------|--------|-------------|
+| **Click** | `{"click": "#buttonId"}` | Click an element using CSS selector |
+| **Input** | `{"input": {"input[name='email']": "value"}}` | Fill an input field |
+| **Select** | `{"select": {"select[name='country']": "USA"}}` | Select from dropdown (by value or text) |
+| **Scroll** | `{"scroll": 1000}` | Scroll down by pixels (negative values scroll up) |
+| **Wait** | `{"wait": 5000}` | Wait for milliseconds (max 15000) |
+| **WaitFor** | `{"waitfor": "#elementId"}` | Wait for element to appear in DOM |
+| **JavaScript** | `{"javascript": "console.log('test')"}` | Execute custom JavaScript code |
+
+### Example Usage
+
+```json
+[
+  {"click": "#accept-cookies"},
+  {"wait": 2000},
+  {"input": {"input[name='search']": "web scraping"}},
+  {"click": "button[type='submit']"},
+  {"waitfor": "#results"},
+  {"scroll": 500}
+]
+```
+
+### Finding CSS Selectors
+
+Need help finding CSS selectors? Try the [Rayrun browser extension](https://chromewebstore.google.com/detail/rayrun/olljocejdgeipcaompahmnfebhkfmnma) to easily select elements and generate selectors.
+
+For more details, see the [Browser Commands documentation](https://scrapi.tech/docs/api_details/v1_scrape/browser_commands).
 
 ## Setup
 

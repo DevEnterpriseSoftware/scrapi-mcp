@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:25-alpine AS builder
 
 COPY . /app
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 RUN --mount=type=cache,target=/root/.npm npm install
 RUN --mount=type=cache,target=/root/.npm-production npm ci --ignore-scripts --omit-dev
 
-FROM node:24-alpine AS release
+FROM node:25-alpine AS release
 
 RUN addgroup -g 1001 nodejs && \
     adduser -S -u 1001 -G nodejs nodeuser
