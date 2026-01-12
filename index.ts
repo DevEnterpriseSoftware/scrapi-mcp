@@ -11,7 +11,7 @@ import { z } from "zod";
 const PORT = process.env.PORT || 5000;
 const SCRAPI_API_KEY = process.env.SCRAPI_API_KEY || "00000000-0000-0000-0000-000000000000";
 const SCRAPI_SERVER_NAME = "ScrAPI MCP Server";
-const SCRAPI_SERVER_VERSION = "0.2.0";
+const SCRAPI_SERVER_VERSION = "0.2.1";
 
 const app = express();
 
@@ -167,6 +167,11 @@ export default function createServer({
     }
 
     try {
+      const requestBody = JSON.stringify(body);
+      
+      console.log(`Using ScrAPI on URL: ${url} with format: ${format}`);
+      console.log(`Request body: ${requestBody}`);
+
       const response = await fetch("https://api.scrapi.tech/v1/scrape", {
         method: "POST",
         headers: {
@@ -174,7 +179,7 @@ export default function createServer({
           "Content-Type": "application/json",
           "X-API-KEY": config.scrapiApiKey || SCRAPI_API_KEY,
         },
-        body: JSON.stringify(body),
+        body: requestBody,
         signal: AbortSignal.timeout(300000),
       });
 
@@ -258,16 +263,6 @@ app.all("/mcp", async (req: Request, res: Response) => {
   }
 });
 
-app.options("/*", (req, res) => {
-  const reqHeaders = req.header("access-control-request-headers");
-  if (reqHeaders) {
-    res.setHeader("Access-Control-Allow-Headers", reqHeaders);
-  }
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.sendStatus(204);
-});
-
 // Main function to start the server in the appropriate mode
 async function main() {
   const transport = process.env.TRANSPORT || "stdio";
@@ -290,7 +285,7 @@ async function main() {
     // Start receiving messages on stdin and sending messages on stdout
     const stdioTransport = new StdioServerTransport();
     await server.connect(stdioTransport);
-    console.error("MCP Server running in stdio mode");
+    console.log("MCP Server running in stdio mode");
   }
 }
 
