@@ -11,7 +11,7 @@ import { z } from "zod";
 const PORT = process.env.PORT || 5000;
 const SCRAPI_API_KEY = process.env.SCRAPI_API_KEY || "00000000-0000-0000-0000-000000000000";
 const SCRAPI_SERVER_NAME = "ScrAPI MCP Server";
-const SCRAPI_SERVER_VERSION = "0.2.1";
+const SCRAPI_SERVER_VERSION = "0.2.3";
 
 const app = express();
 
@@ -169,8 +169,8 @@ export default function createServer({
     try {
       const requestBody = JSON.stringify(body);
       
-      console.log(`Using ScrAPI on URL: ${url} with format: ${format}`);
-      console.log(`Request body: ${requestBody}`);
+      console.error(`Using ScrAPI on URL: ${url} with format: ${format}`);
+      console.error(`Request body: ${requestBody}`);
 
       const response = await fetch("https://api.scrapi.tech/v1/scrape", {
         method: "POST",
@@ -251,7 +251,7 @@ app.all("/mcp", async (req: Request, res: Response) => {
     await server.connect(transport);
     await transport.handleRequest(req, res, req.body);
   } catch (error) {
-    console.error("Error handling MCP request:", error);
+    console.error("Error handling ScrAPI MCP request:", error);
 
     if (!res.headersSent) {
       res.status(500).json({
@@ -270,7 +270,7 @@ async function main() {
   if (transport === "http") {
     // Run in HTTP mode
     app.listen(PORT, () => {
-      console.log(`MCP HTTP Server listening on port ${PORT}`);
+      console.error(`ScrAPI MCP HTTP Server version ${SCRAPI_SERVER_VERSION} listening on port ${PORT}`);
     });
   } else {
     const scrapiApiKey = SCRAPI_API_KEY;
@@ -285,7 +285,7 @@ async function main() {
     // Start receiving messages on stdin and sending messages on stdout
     const stdioTransport = new StdioServerTransport();
     await server.connect(stdioTransport);
-    console.log("MCP Server running in stdio mode");
+    console.error(`ScrAPI MCP Server version ${SCRAPI_SERVER_VERSION} running in stdio mode`);
   }
 }
 
