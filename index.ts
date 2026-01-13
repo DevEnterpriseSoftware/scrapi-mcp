@@ -11,7 +11,7 @@ import { z } from "zod";
 const PORT = process.env.PORT || 5000;
 const SCRAPI_API_KEY = process.env.SCRAPI_API_KEY || "00000000-0000-0000-0000-000000000000";
 const SCRAPI_SERVER_NAME = "ScrAPI MCP Server";
-const SCRAPI_SERVER_VERSION = "0.2.3";
+const SCRAPI_SERVER_VERSION = "0.2.4";
 
 const app = express();
 

@@ -1,6 +1,6 @@
 {
   "name": "@deventerprisesoftware/scrapi-mcp",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "MCP server for using ScrAPI to scrape web pages.",
   "keywords": [
     "mcp",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.0.6",
+    "@types/node": "^25.0.8",
     "shx": "^0.4.0",
     "typescript": "^5.9.3"
   }
