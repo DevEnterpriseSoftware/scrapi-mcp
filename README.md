@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/deventerprisesoftware-scrapi-mcp-badge.png)](https://mseep.ai/app/deventerprisesoftware-scrapi-mcp)
+
 ![ScrAPI logo](https://raw.githubusercontent.com/DevEnterpriseSoftware/scrapi-sdk-dotnet/master/icon_small.png)
 
 # ScrAPI MCP Server
