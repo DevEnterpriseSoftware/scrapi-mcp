@@ -17,11 +17,15 @@ on:
         type: boolean
         default: false
 
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # push version commit and tag
+      contents: write # push version commit and tag
     outputs:
       version: ${{ steps.version.outputs.version }}
 
@@ -73,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm
     permissions:
-      id-token: write  # OIDC trusted publishing
+      id-token: write # OIDC trusted publishing
 
     steps:
       - name: Download build artifact
@@ -128,7 +132,7 @@ jobs:
     if: inputs.publish
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # create GitHub release
+      contents: write # create GitHub release
 
     steps:
       - name: Create GitHub Release

@@ -1,7 +1,4 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
-  "maintainers": [
-    "DevEnterpriseSoftware",
-    "brutaldev"
-  ]
+  "maintainers": ["DevEnterpriseSoftware", "brutaldev"]
 }
