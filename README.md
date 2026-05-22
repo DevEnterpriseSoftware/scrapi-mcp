@@ -38,6 +38,7 @@ ScrAPI is your ultimate web scraping solution, offering powerful, reliable, and 
 ## Browser Commands
 
 Both tools support optional browser commands that allow you to interact with the page before scraping. This is useful for:
+
 - Clicking buttons (e.g., "Accept Cookies", "Load More")
 - Filling out forms
 - Selecting dropdown options
@@ -49,26 +50,26 @@ Both tools support optional browser commands that allow you to interact with the
 
 Commands are provided as a JSON array string. All commands are executed with human-like behavior (random mouse movements, variable typing speed, etc.):
 
-| Command | Format | Description |
-|---------|--------|-------------|
-| **Click** | `{"click": "#buttonId"}` | Click an element using CSS selector |
-| **Input** | `{"input": {"input[name='email']": "value"}}` | Fill an input field |
-| **Select** | `{"select": {"select[name='country']": "USA"}}` | Select from dropdown (by value or text) |
-| **Scroll** | `{"scroll": 1000}` | Scroll down by pixels (negative values scroll up) |
-| **Wait** | `{"wait": 5000}` | Wait for milliseconds (max 15000) |
-| **WaitFor** | `{"waitfor": "#elementId"}` | Wait for element to appear in DOM |
-| **JavaScript** | `{"javascript": "console.log('test')"}` | Execute custom JavaScript code |
+| Command        | Format                                          | Description                                       |
+| -------------- | ----------------------------------------------- | ------------------------------------------------- |
+| **Click**      | `{"click": "#buttonId"}`                        | Click an element using CSS selector               |
+| **Input**      | `{"input": {"input[name='email']": "value"}}`   | Fill an input field                               |
+| **Select**     | `{"select": {"select[name='country']": "USA"}}` | Select from dropdown (by value or text)           |
+| **Scroll**     | `{"scroll": 1000}`                              | Scroll down by pixels (negative values scroll up) |
+| **Wait**       | `{"wait": 5000}`                                | Wait for milliseconds (max 15000)                 |
+| **WaitFor**    | `{"waitfor": "#elementId"}`                     | Wait for element to appear in DOM                 |
+| **JavaScript** | `{"javascript": "console.log('test')"}`         | Execute custom JavaScript code                    |
 
 ### Example Usage
 
 ```json
 [
-  {"click": "#accept-cookies"},
-  {"wait": 2000},
-  {"input": {"input[name='search']": "web scraping"}},
-  {"click": "button[type='submit']"},
-  {"waitfor": "#results"},
-  {"scroll": 500}
+  { "click": "#accept-cookies" },
+  { "wait": 2000 },
+  { "input": { "input[name='search']": "web scraping" } },
+  { "click": "button[type='submit']" },
+  { "waitfor": "#results" },
+  { "scroll": 500 }
 ]
 ```
 

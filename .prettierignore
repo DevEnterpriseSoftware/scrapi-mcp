@@ -1,0 +1,11 @@
+# Package Managers
+package-lock.json
+
+# Miscellaneous
+**/.git
+**/.vscode
+**/dist
+**/node_modules
+
+# Docs
+**/README.md

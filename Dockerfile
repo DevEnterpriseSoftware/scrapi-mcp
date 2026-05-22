@@ -3,7 +3,8 @@ FROM node:25-alpine AS builder
 COPY . /app
 WORKDIR /app
 
-RUN --mount=type=cache,target=/root/.npm npm install
+RUN --mount=type=cache,target=/root/.npm npm ci
+RUN npm run build
 RUN --mount=type=cache,target=/root/.npm-production npm ci --ignore-scripts --omit-dev
 
 FROM node:25-alpine AS release

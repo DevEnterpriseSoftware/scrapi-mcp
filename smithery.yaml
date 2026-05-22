@@ -2,16 +2,16 @@
 runtime: "container"
 target: "container"
 build:
-  dockerfile: "Dockerfile"           # Path to your Dockerfile
-  dockerBuildPath: "."               # Docker build context
+  dockerfile: "Dockerfile" # Path to your Dockerfile
+  dockerBuildPath: "." # Docker build context
 startCommand:
   type: "http"
   # configSchema and exampleConfig are optional - remove if no configuration needed
-  configSchema:                      # Optional: Define configuration schema
+  configSchema: # Optional: Define configuration schema
     type: object
     properties:
       scrapiApiKey:
         type: string
         description: ScrAPI API key for scraping. Leave empty for default limited usage.
-  exampleConfig:                     # Optional: Example configuration
+  exampleConfig: # Optional: Example configuration
     scrapiApiKey: "your-scrapi-api-key-here"
