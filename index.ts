@@ -75,6 +75,14 @@ interface ScrapeRequestBody {
   browserCommands?: unknown[];
 }
 
+export const scrapeToolInputSchema = {
+  url: z.string().url({ error: "Invalid URL" }).describe("The URL to scrape"),
+  browserCommands: z
+    .string()
+    .optional()
+    .describe("Optional JSON array of browser commands to execute before scraping. See tool description for available commands and format."),
+};
+
 // Parse configuration from query parameters
 export function parseConfig(req: Request): Record<string, unknown> {
   const configParam = req.query["config"];
@@ -109,13 +117,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
         "Use this for scraping website content that is difficult to access because of bot detection, captchas or even geolocation restrictions. " +
         "The result will be in HTML which is preferable if advanced parsing is required.\n\n" +
         BROWSER_COMMANDS_DESCRIPTION,
-      inputSchema: {
-        url: z.string().url({ message: "Invalid URL" }).describe("The URL to scrape"),
-        browserCommands: z
-          .string()
-          .optional()
-          .describe("Optional JSON array of browser commands to execute before scraping. See tool description for available commands and format."),
-      },
+      inputSchema: scrapeToolInputSchema,
     },
     async ({ url, browserCommands }) => await scrapeUrl(url, "HTML", config.scrapiApiKey || SCRAPI_API_KEY, browserCommands),
   );
@@ -129,13 +131,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
         "Use this for scraping website content that is difficult to access because of bot detection, captchas or even geolocation restrictions. " +
         "The result will be in Markdown which is preferable if the text content of the webpage is important and not the structural information of the page.\n\n" +
         BROWSER_COMMANDS_DESCRIPTION,
-      inputSchema: {
-        url: z.string().url({ message: "Invalid URL" }).describe("The URL to scrape"),
-        browserCommands: z
-          .string()
-          .optional()
-          .describe("Optional JSON array of browser commands to execute before scraping. See tool description for available commands and format."),
-      },
+      inputSchema: scrapeToolInputSchema,
     },
     async ({ url, browserCommands }) => await scrapeUrl(url, "Markdown", config.scrapiApiKey || SCRAPI_API_KEY, browserCommands),
   );

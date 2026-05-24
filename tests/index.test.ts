@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import type { Request } from "express";
-import { parseConfig, scrapeUrl, configSchema } from "../index.js";
+import { parseConfig, scrapeUrl, configSchema, scrapeToolInputSchema } from "../index.js";
+import { z } from "zod";
 
 // Helper to create a minimal mock Request with query params
 function mockRequest(query: Record<string, unknown> = {}): Request {
@@ -63,6 +64,30 @@ describe("configSchema", () => {
 
   it("rejects when scrapiApiKey is not a string", () => {
     expect(() => configSchema.parse({ scrapiApiKey: 123 })).toThrow();
+  });
+});
+
+// ─── scrapeToolInputSchema ──────────────────────────────────────────────────
+
+describe("scrapeToolInputSchema", () => {
+  const schema = z.object(scrapeToolInputSchema);
+
+  it("accepts a valid URL with no browserCommands", () => {
+    const parsed = schema.safeParse({ url: "https://example.com" });
+    expect(parsed.success).toBe(true);
+  });
+
+  it("rejects an invalid URL", () => {
+    const parsed = schema.safeParse({ url: "not-a-url" });
+    expect(parsed.success).toBe(false);
+    if (!parsed.success) {
+      expect(parsed.error.issues[0]?.message).toContain("Invalid URL");
+    }
+  });
+
+  it("rejects non-string browserCommands", () => {
+    const parsed = schema.safeParse({ url: "https://example.com", browserCommands: 123 });
+    expect(parsed.success).toBe(false);
   });
 });
 
