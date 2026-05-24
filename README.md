@@ -5,15 +5,12 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![NPM Downloads](https://img.shields.io/npm/dm/@deventerprisesoftware/scrapi-mcp)](https://www.npmjs.com/package/@deventerprisesoftware/scrapi-mcp)
 [![Docker Pulls](https://img.shields.io/docker/pulls/deventerprisesoftware/scrapi-mcp)](https://hub.docker.com/r/deventerprisesoftware/scrapi-mcp)
-[![smithery badge](https://smithery.ai/badge/@DevEnterpriseSoftware/scrapi-mcp)](https://smithery.ai/server/@DevEnterpriseSoftware/scrapi-mcp)
+[![smithery badge](https://smithery.ai/badge/DevEnterpriseSoftware/scrapi-mcp)](https://smithery.ai/servers/DevEnterpriseSoftware/scrapi-mcp)
+[![scrapi-mcp MCP server](https://glama.ai/mcp/servers/DevEnterpriseSoftware/scrapi-mcp/badges/score.svg)](https://glama.ai/mcp/servers/DevEnterpriseSoftware/scrapi-mcp)
 
 MCP server for using [ScrAPI](https://scrapi.tech) to scrape web pages.
 
 ScrAPI is your ultimate web scraping solution, offering powerful, reliable, and easy-to-use features to extract data from any website effortlessly.
-
-<a href="https://glama.ai/mcp/servers/@DevEnterpriseSoftware/scrapi-mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@DevEnterpriseSoftware/scrapi-mcp/badge" alt="ScrAPI Server MCP server" />
-</a>
 
 ## Tools
 
