@@ -10,7 +10,25 @@ import { z } from "zod";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { version: SCRAPI_SERVER_VERSION } = require("./package.json") as { version: string };
+
+function getServerVersion(): string {
+  const packageJsonCandidates = ["./package.json", "../package.json"];
+
+  for (const packageJsonPath of packageJsonCandidates) {
+    try {
+      const { version } = require(packageJsonPath) as { version?: unknown };
+      if (typeof version === "string" && version.trim() !== "") {
+        return version;
+      }
+    } catch {
+      // Try next candidate path.
+    }
+  }
+
+  return "0.0.0";
+}
+
+const SCRAPI_SERVER_VERSION = getServerVersion();
 
 const PORT = process.env.PORT || 5000;
 const SCRAPI_API_KEY = process.env.SCRAPI_API_KEY || "00000000-0000-0000-0000-000000000000";
