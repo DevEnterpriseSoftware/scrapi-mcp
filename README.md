@@ -97,7 +97,7 @@ PowerShell:
 $env:SCRAPI_API_KEY = "your-scrapi-api-key"
 ```
 
-An API key is optional. Without one, ScrAPI currently allows limited free usage with lower concurrency and queueing priority.
+An API key is required. Without one, ScrAPI currently allows limited free usage on certain domain with lower concurrency and queueing priority.
 
 ## Quick Start
 
@@ -485,7 +485,6 @@ ScrAPI also provides hosted MCP endpoints:
 
 ```text
 Streamable HTTP: https://api.scrapi.tech/mcp
-SSE:             https://api.scrapi.tech/mcp/sse
 ```
 
 Cloud MCP servers are not yet supported by every MCP client. They are most useful for custom clients, MCP Inspector, or platforms that support remote MCP servers.
