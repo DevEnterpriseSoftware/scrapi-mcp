@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![NPM Downloads](https://img.shields.io/npm/dm/@deventerprisesoftware/scrapi-mcp)](https://www.npmjs.com/package/@deventerprisesoftware/scrapi-mcp)
 [![Docker Pulls](https://img.shields.io/docker/pulls/deventerprisesoftware/scrapi-mcp)](https://hub.docker.com/r/deventerprisesoftware/scrapi-mcp)
-[![smithery badge](https://smithery.ai/badge/DevEnterpriseSoftware/scrapi-mcp)](https://smithery.ai/servers/DevEnterpriseSoftware/scrapi-mcp)
+[![LightNow capabilities](https://lightnow.ai/badge/io.github.DevEnterpriseSoftware/scrapi-mcp)](https://lightnow.ai/servers/io.github.DevEnterpriseSoftware/scrapi-mcp)
 [![scrapi-mcp MCP server](https://glama.ai/mcp/servers/DevEnterpriseSoftware/scrapi-mcp/badges/score.svg)](https://glama.ai/mcp/servers/DevEnterpriseSoftware/scrapi-mcp)
 
 ScrAPI MCP Server lets MCP-compatible clients scrape web pages through [ScrAPI](https://scrapi.tech).
