@@ -456,6 +456,7 @@ Environment variables:
 | `SCRAPI_API_KEY` | Limited default key | ScrAPI API key used when calling the ScrAPI scrape API. |
 | `TRANSPORT` | `stdio` | Use `stdio` or `http`. |
 | `PORT` | `5000` | Port used when `TRANSPORT=http`. |
+| `CORS_ALLOWED_ORIGINS` | _(none)_ | Comma-separated browser origins allowed to call the HTTP endpoint. Unset disables CORS; non-browser MCP clients are unaffected. |
 
 ### Test with MCP Inspector
 
@@ -468,7 +469,7 @@ npx @modelcontextprotocol/inspector npx -y @deventerprisesoftware/scrapi-mcp
 HTTP mode:
 
 ```bash
-TRANSPORT=http PORT=5000 npx -y @deventerprisesoftware/scrapi-mcp
+TRANSPORT=http PORT=5000 CORS_ALLOWED_ORIGINS=http://localhost:6274 npx -y @deventerprisesoftware/scrapi-mcp
 ```
 
 Then open MCP Inspector and connect to:

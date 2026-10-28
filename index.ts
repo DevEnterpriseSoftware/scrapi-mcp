@@ -33,12 +33,19 @@ const SCRAPI_SERVER_VERSION = getServerVersion();
 const PORT = process.env.PORT || 5000;
 const SCRAPI_API_KEY = process.env.SCRAPI_API_KEY || "00000000-0000-0000-0000-000000000000";
 const SCRAPI_SERVER_NAME = "ScrAPI MCP Server";
+const CORS_ALLOWED_ORIGINS = (process.env.CORS_ALLOWED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter((origin) => origin.length > 0);
 
 const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: (origin, callback) => {
+      const allowedOrigin = origin ? CORS_ALLOWED_ORIGINS.find((allowed) => allowed === origin) : undefined;
+      callback(null, allowedOrigin ?? false);
+    },
     exposedHeaders: ["mcp-session-id", "mcp-protocol-version"],
     allowedHeaders: ["Content-Type", "mcp-session-id", "mcp-protocol-version", "Authorization"],
     methods: ["GET", "POST", "OPTIONS"],
