@@ -1,6 +1,6 @@
 {
   "name": "@deventerprisesoftware/scrapi-mcp",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "MCP server for using ScrAPI to scrape web pages.",
   "keywords": [
     "mcp",
